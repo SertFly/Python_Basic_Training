@@ -19,7 +19,7 @@ def find_file(cur_path, file_name):
 
 
 file_path = find_file(os.path.abspath
-                      (os.path.join('..', '..', '..', '..', 'learn_work')),
+                      (os.path.join('..', '..', '..')),
                       'Task_2_1.py')
 history_file = open('search_history.txt', 'a')
 
