@@ -10,20 +10,33 @@ print('Задача 2. Логирование')
 # (привет предыдущим модулям). Если в строке встречается число, то
 # программа выдаёт ошибку ValueError и записывает эту ошибку в файл errors.log
 
+import string
 
-def check_palindrom(text):
-    counts = {}
-    for symbol in text:
-        if symbol in counts.keys():
-            counts[symbol] += 1
-        elif symbol in 'abcdefghijklmnopqrstuvwxyz' or symbol in 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя':
-            counts[symbol] = 1
 
-    middle_point = ''  # только одна буква может встречаться нечетное количество раз
-    for symbol in counts:
-        if middle_point and counts[symbol] % 2 == 1:
-            return False
-        elif counts[symbol] % 2 == 1:
-            middle_point = symbol
-    return True
+def check_palindrome(text):
+    return text == text[::-1]
 
+
+def clear_text(text):
+    new_text = text.rstrip()
+    new_string = new_text.translate(str.maketrans('', '', string.punctuation))
+    new_line = new_string.replace(' ', '')
+    print(new_line)
+    return new_line.lower()
+
+
+with open('words.txt', 'r', encoding='utf8') as file, open('errors.log', 'w', encoding='utf8') as log_file:
+    count = 0
+    line_count = 0
+    for line in file:
+        line_count += 1
+        clear_line = clear_text(line)
+        try:
+            if clear_line.isalpha():
+                count += check_palindrome(clear_line)
+            else:
+                raise ValueError(f'{line_count} строка не полностью состоит из букв!')
+        except ValueError as exc:
+            log_file.write(f'\n{line_count} строка не полностью состоит из букв!')
+
+    print(count)
